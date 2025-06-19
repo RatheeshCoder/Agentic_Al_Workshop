@@ -15,8 +15,8 @@ from datetime import datetime
 import re
 
 # Configuration
-os.environ["GOOGLE_API_KEY"] = "AIzaSyB_KtLx3UmzQKeC4myIMej7A0Rsh_aS_CY"
-os.environ["TAVILY_API_KEY"] = "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"
+os.environ["GOOGLE_API_KEY"] = "your_google_key"
+os.environ["TAVILY_API_KEY"] = "your_tavily_key"
 
 # Vector Database Configuration
 VECTOR_DB_PATH = "./vector_db"
