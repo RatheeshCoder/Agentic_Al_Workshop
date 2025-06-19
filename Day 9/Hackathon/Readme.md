@@ -129,7 +129,7 @@ Follow these steps to set up the project on your local machine:
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/industry-readiness-agent.git
+git clone https://github.com/yourusername/industry-readiness-agent.git](https://github.com/RatheeshCoder/Agentic_Al_Workshop/tree/main/Day%209/Hackathon
 cd industry-readiness-agent
 ```
 
@@ -173,7 +173,7 @@ TAVILY_API_KEY=your_tavily_api_key
 ### ✅ Run the Agent Pipeline
 
 ```bash
-python main.py
+python app.py
 ```
 
 You will be prompted to:
