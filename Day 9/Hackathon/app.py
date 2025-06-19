@@ -584,7 +584,7 @@ def enhanced_reporter(state):
     vector_stats = vector_rag.get_collection_stats() if vector_rag else {}
     
     print("\n" + "="*60)
-    print("     ENHANCED RAG-POWERED GAP ANALYSIS REPORT")
+    print("     ENHANCED STUDENT GAP ANALYSIS REPORT")
     print("="*60)
 
     print(f"\n🎓 Student Profile:")
