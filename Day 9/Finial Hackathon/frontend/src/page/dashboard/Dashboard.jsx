@@ -53,28 +53,27 @@ const Dashboard = () => {
     fetchData();
   }, [analysisId]);
 
- const generateReport = () => {
-  if (!dashboardData) return;
+  const generateReport = () => {
+    if (!dashboardData) return;
 
-  setIsGeneratingReport(true);
+    setIsGeneratingReport(true);
 
-  const reportContent = generateReportContent(dashboardData, analysisId);
+    const reportContent = generateReportContent(dashboardData, analysisId);
 
-  const blob = new Blob([reportContent], { type: 'text/plain' });
-  const url = window.URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = `Career_Compatibility_Report_${analysisId}_${new Date().toISOString().split('T')[0]}.txt`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  window.URL.revokeObjectURL(url);
+    const blob = new Blob([reportContent], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `Career_Compatibility_Report_${analysisId}_${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
 
-  setTimeout(() => {
-    setIsGeneratingReport(false);
-  }, 1000);
-};
-
+    setTimeout(() => {
+      setIsGeneratingReport(false);
+    }, 1000);
+  };
 
   if (loading) {
     return (
@@ -98,7 +97,11 @@ const Dashboard = () => {
     skill_alignment,
     student_intents,
     counseling_report,
-    input_data
+    input_data,
+    company_culture,
+    analysis_summary,
+    created_at,
+    status
   } = dashboardData;
 
   // Bar Chart Configuration for Compatibility Breakdown
@@ -333,6 +336,7 @@ const Dashboard = () => {
         {/* Header */}
         <div className="dashboard-header">
           <h1>Career Compatibility Dashboard</h1>
+          <p>Analysis ID: {analysisId} | Status: {status} | Created: {new Date(created_at).toLocaleDateString()}</p>
         </div>
 
         <div className="metrics-row">
@@ -394,66 +398,107 @@ const Dashboard = () => {
           </div>
 
           <div className="culture-card">
-            <h3>Company</h3>
-            <p className="culture-subtitle">Culture Match</p>
+            <h3>Company Culture</h3>
+            <p className="culture-subtitle">Cultural Fit: {compatibility_score.cultural_fit}%</p>
             <div className="culture-items">
+              {company_culture.values.map((value, index) => (
+                <div className="culture-item" key={index}>
+                  <CheckCircle size={16} className="check-icon" />
+                  <span>{value}</span>
+                </div>
+              ))}
               <div className="culture-item">
-                <CheckCircle size={16} className="check-icon" />
-                <span>Collaborative Environment</span>
+                <FileText size={16} className="check-icon" />
+                <span>Work-Life Balance: {company_culture.work_life_balance}</span>
               </div>
-              <div className="culture-item">
-                <CheckCircle size={16} className="check-icon" />
-                <span>Innovation Focus</span>
-              </div>
-              <div className="culture-item">
-                <XCircle size={16} className="x-icon" />
-                <span>Remote Work Options</span>
-              </div>
-              <div className="culture-item">
-                <XCircle size={16} className="x-icon" />
-                <span>Learning Support</span>
-              </div>
+              {company_culture.learning_support.map((support, index) => (
+                <div className="culture-item" key={`support-${index}`}>
+                  <CheckCircle size={16} className="check-icon" />
+                  <span>{support}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
         <div className="skills-goals-row">
           <div className="skills-card">
-            <h3>Current Skills Proficiency</h3>
+            <h3>Skills Analysis</h3>
             <div className="skills-chart" style={{ height: '300px' }}>
               <Bar data={skillsChartData} options={skillsChartOptions} />
+            </div>
+            <div className="skills-details">
+              <h4>Skill Gaps</h4>
+              <ul>
+                {skill_alignment.skill_gaps.map((gap, index) => (
+                  <li key={index}>{gap}</li>
+                ))}
+              </ul>
+              <h4>Hidden Opportunities</h4>
+              <ul>
+                {skill_alignment.hidden_opportunities.map((opportunity, index) => (
+                  <li key={index}>{opportunity}</li>
+                ))}
+              </ul>
+              <h4>Transferable Skills</h4>
+              <ul>
+                {skill_alignment.transferable_skills.map((skill, index) => (
+                  <li key={index}>{skill}</li>
+                ))}
+              </ul>
             </div>
           </div>
 
           <div className="goals-card">
-            <h3>Learning Goals Progress</h3>
+            <h3>Student Preferences & Goals</h3>
             <div className="goals-list">
-              {student_intents.learning_goals.map((goal, index) => {
-                const randomPercentage = Math.floor(Math.random() * 41) + 60; // Random between 60–100
-                return (
-                  <div key={index} className="goal-item">
-                    <div className="goal-header">
-                      <span className="goal-name">{goal}</span>
-                      <span className="goal-percentage">{`${randomPercentage}%`}</span>
-                    </div>
-                    <div className="goal-bar">
-                      <div
-                        className="goal-progress"
-                        style={{ width: `${randomPercentage}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                );
-              })}
+              <h4>Work Preferences</h4>
+              <ul>
+                {student_intents.work_preferences.map((pref, index) => (
+                  <li key={index}>{pref}</li>
+                ))}
+              </ul>
+              <h4>Career Aspirations</h4>
+              <ul>
+                {student_intents.career_aspirations.map((asp, index) => (
+                  <li key={index}>{asp}</li>
+                ))}
+              </ul>
+              <h4>Preferred Culture</h4>
+              <ul>
+                {student_intents.preferred_culture.map((culture, index) => (
+                  <li key={index}>{culture}</li>
+                ))}
+              </ul>
             </div>
+          </div>
+        </div>
+
+        <div className="counseling-report">
+          <div className="report-card">
+            <h3>Counseling Report</h3>
+            <h4>Match Reasoning</h4>
+            <p>{counseling_report.match_reasoning}</p>
+            <h4>Alternative Suggestions</h4>
+            <ul>
+              {counseling_report.alternative_suggestions.map((suggestion, index) => (
+                <li key={index}>{suggestion}</li>
+              ))}
+            </ul>
+            <h4>Skill Development Plan</h4>
+            <ul>
+              {counseling_report.skill_development_plan.map((plan, index) => (
+                <li key={index}>{plan}</li>
+              ))}
+            </ul>
           </div>
         </div>
 
         <footer>
           <div className="stepper-box">
+            <h3>Actionable Advice</h3>
             {counseling_report.actionable_advice.map((advice, index) => {
               const [title, description] = advice.split(' - ');
-              // Determine priority from title (assuming last word is the level, or customize as needed)
               let priority = 'Low';
               if (title.toLowerCase().includes('high')) {
                 priority = 'High';
@@ -461,7 +506,6 @@ const Dashboard = () => {
                 priority = 'Medium';
               }
 
-              // Assign class based on priority
               const statusClass = {
                 High: 'stepper-completed',
                 Medium: 'stepper-active',
@@ -503,8 +547,21 @@ const Dashboard = () => {
           </div>
           <div className="right-column">
             <div className="career-goals-card">
-              <h3>Career Goals</h3>
-              <p>{input_data?.career_goals || 'No career goals provided.'}</p>
+              <h3>Job Description</h3>
+              <p>{input_data?.job_descriptions || 'No job description provided.'}</p>
+              <h4>Company Details</h4>
+              <p>Size: {company_culture.company_size}</p>
+              <p>Team Culture: {company_culture.team_culture}</p>
+              <h4>Company URLs</h4>
+              <ul>
+                {input_data.company_urls.map((url, index) => (
+                  <li key={index}>
+                    <a href={url.replace(/[\[\]"]/g, '')} target="_blank" rel="noopener noreferrer">
+                      {url.replace(/[\[\]"]/g, '')}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </footer>
