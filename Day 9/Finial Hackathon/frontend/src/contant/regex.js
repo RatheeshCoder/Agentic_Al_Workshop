@@ -1,0 +1,2 @@
+export const description = /^[a-zA-Z0-9\s.,!?'"()+\-=\[\]{}<>:;&$#*|`~%]+$/;
+export const link = /^https?:\/\/(?:www\.)?[a-zA-Z0-9\-]{1,256}(?:\.[a-zA-Z0-9\-]{1,256})*(?:\.[a-zA-Z]{2,63})(?:\/[^\s]*)?$/i;
