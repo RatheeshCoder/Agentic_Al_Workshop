@@ -1,11 +1,4 @@
-import axios from 'axios';
-
-const API_BASE_URL = 'http://localhost:8000';
-
-const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 60000, 
-});
+import apiClient from './api';
 
 export const agentService = {
 
@@ -100,6 +93,19 @@ export const agentService = {
 };
 
 
+export const submitStudentProfile = async (formData) => {
+  try {
+    const response = await apiClient.post('/student-data', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('API error:', error);
+    throw error;
+  }
+};
 export const  getFinialReport = async (reportId) => {
   try {
     const response = await apiClient.get(`/analysis/${reportId}`);
@@ -117,3 +123,52 @@ export const  getFinialReport = async (reportId) => {
     }
   }
 }
+
+
+export const signUp = async (formData) => {
+  try {
+    const response = await apiClient.post('/signup', formData);
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      const errorMessage = error.response.data?.message || 
+                           error.response.data?.error || 
+                           `Server error: ${error.response.status}`;
+      throw new Error(errorMessage);
+    } else if (error.request) {
+      throw new Error('Network error: Unable to connect to server');
+    } else {
+      throw new Error(error.message || 'An unexpected error occurred');
+    }
+  }
+}
+
+export const login = async (formData) => {
+  try {
+    const response = await apiClient.post('/login', formData);
+    localStorage.setItem('token', response.data.access_token);
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      const errorMessage = error.response.data?.message || 
+                           error.response.data?.error || 
+                           `Server error: ${error.response.status}`;
+      throw new Error(errorMessage);
+    } else if (error.request) {
+      throw new Error('Network error: Unable to connect to server');
+    } else {
+      throw new Error(error.message || 'An unexpected error occurred');
+    }
+  }
+}
+
+
+export const getStudentProfile = async () => {
+  try {
+    const response = await apiClient.get('/student-data');
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch profile:', error);
+    throw error;
+  }
+};

@@ -7,11 +7,13 @@ import os
 import tempfile
 import uvicorn
 from typing import Dict, Any
-
+from app.routers.auth import router as auth_router
 from app.services.compatibility_service import CompatibilityService
 from app.schemas.compatibility_schemas import (
     CompatibilityResponse, 
 )
+
+from app.routers.user import router as user_router
 
 app = FastAPI(title="Candidate-Company Compatibility Navigator API", version="1.0.0")
 
@@ -23,10 +25,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize the service
+
 compatibility_service = CompatibilityService()
 
-# Response models
+app.include_router(auth_router)
+app.include_router(user_router)
+
+
 class AnalysisInitiatedResponse(BaseModel):
     message: str
     analysis_id: str

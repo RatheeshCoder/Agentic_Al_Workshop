@@ -40,6 +40,8 @@ const FileUpload = ({ title, description, acceptedFileTypes, onFileSelect, onClo
         onClose()
     }
 
+
+    
     return (
         <div className="modal-overlay">
             <div className="modal">

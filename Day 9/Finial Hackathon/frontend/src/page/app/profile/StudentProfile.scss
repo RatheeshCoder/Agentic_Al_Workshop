@@ -1,0 +1,135 @@
+.student-profile-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-radius: 10px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #333;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+
+.form-group textarea,
+.form-group input[type="file"] {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.form-group textarea:focus,
+.form-group input[type="file"]:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+button[type="submit"] {
+  padding: 0.75rem;
+  background-color: #2563eb;
+  color: white;
+  font-weight: 500;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button[disabled] {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+button[type="submit"]:hover:not([disabled]) {
+  background-color: #1e40af;
+}
+
+.message {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.message.success {
+  background-color: #ecfdf5;
+  color: #047857;
+}
+
+.message.error {
+  background-color: #fef2f2;
+  color: #b91c1c;
+}
+
+
+
+.view-profile {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f9fafb;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+
+  h2 {
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    color: #111827;
+  }
+
+  .section {
+    margin-bottom: 1.25rem;
+
+    strong {
+      display: block;
+      color: #374151;
+      font-size: 1rem;
+      margin-bottom: 0.3rem;
+    }
+
+    p, a {
+      font-size: 1rem;
+      color: #1f2937;
+    }
+
+    a {
+      color: #2563eb;
+      text-decoration: underline;
+      &:hover {
+        color: #1e40af;
+      }
+    }
+  }
+
+  &.error {
+    color: #b91c1c;
+    background-color: #fef2f2;
+    padding: 1rem;
+    border-radius: 6px;
+  }
+}

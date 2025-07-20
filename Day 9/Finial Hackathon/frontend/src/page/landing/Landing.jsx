@@ -1,13 +1,13 @@
 import React from 'react'
-import './Home.style.scss'
+import './Landing.style.scss'
 import logo from '../../assets/img/logo.png'
 import HomeRight from '../../assets/img/homeRight.png'
 import { useNavigate } from 'react-router-dom'
 
-const Home = () => {
+const Landing = () => {
     const navigate = useNavigate()
     return (
-        <section className="home-section">
+        <section className="Landing-section">
             <header>
                 <div className="left-logo">
                     <img src={logo} alt="MatchMind AI" />
@@ -60,4 +60,4 @@ const Home = () => {
     )
 }
 
-export default Home
+export default Landing

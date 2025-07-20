@@ -7,12 +7,13 @@ import { link } from '../../contant/regex'
 import { validationSchema } from '../../validation/Validation'
 import { agentService } from '../../service/Agent.service'
 import { useNavigate } from 'react-router-dom'
-
+import Loader from '../../components/loadar/Loader'
 const AgentDataUpload = () => {
     const [currentUrl, setCurrentUrl] = useState('')
     const [showFileUpload, setShowFileUpload] = useState(false)
     const [uploadConfig, setUploadConfig] = useState({})
     const [activeField, setActiveField] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
 
     const initialValues = {
@@ -122,6 +123,7 @@ const AgentDataUpload = () => {
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
         try {
             setSubmitting(true)
+            setIsLoading(true)
             
             // Show loading toast
             const loadingToast = toast.loading('Uploading your data...')
@@ -179,11 +181,14 @@ const AgentDataUpload = () => {
             })
         } finally {
             setSubmitting(false)
+            setIsLoading(false)
         }
     }
 
     return (
         <section className='agent-data-upload'>
+
+            {isLoading && <Loader/>}
             <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}

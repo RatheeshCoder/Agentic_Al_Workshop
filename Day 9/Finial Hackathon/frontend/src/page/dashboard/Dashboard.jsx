@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { CheckCircle, XCircle, Download, FileText } from 'lucide-react';
 import './Dashboard.style.scss';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getFinialReport } from '../../service/Agent.service';
 import {
   Chart as ChartJS,
@@ -15,6 +15,7 @@ import {
 } from 'chart.js';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import { generateReportContent } from './generateReportContent';
+import logo from '../../assets/img/logo.png'
 
 // Register Chart.js components
 ChartJS.register(
@@ -30,12 +31,13 @@ ChartJS.register(
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeIndex, setActiveIndex] = useState(null);
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   const barChartRef = useRef(null);
   const doughnutChartRef = useRef(null);
 
   const { analysisId } = useParams();
+
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
@@ -106,15 +108,15 @@ const Dashboard = () => {
 
   // Bar Chart Configuration for Compatibility Breakdown
   const compatibilityChartData = {
-    labels: ['Overall\nScore', 'Intent\nAlignment', 'Skill\nMatch', 'Cultural\nFit'],
+    labels: ['Overall\nScore', 'Skills\nAlignment', 'Career\nMatch', 'Cultural\nFit'],
     datasets: [
       {
         label: 'Compatibility Score',
         data: [
           compatibility_score?.overall_score || 0,
-          compatibility_score?.intent_alignment || 0,
-          compatibility_score?.skill_match || 0,
-          compatibility_score?.cultural_fit || 0
+          compatibility_score?.detailed_breakdown?.technical_fit || 0,
+          compatibility_score?.detailed_breakdown?.career_alignment || 0,
+          compatibility_score?.detailed_breakdown?.cultural_alignment || 0,
         ],
         backgroundColor: [
           'rgba(66, 133, 244, 0.8)',
@@ -326,17 +328,33 @@ const Dashboard = () => {
     }
   };
 
-  const toggleIndex = (index) => {
-    setActiveIndex(activeIndex === index ? null : index);
-  };
+
 
   return (
     <div className="dashboard">
-      <div className="dashboard-container">
+
+        <header>
+                      <div className="left-logo">
+                          <img src={logo} alt="MatchMind AI" />
+                          <h1>MatchMind</h1>
+                      </div>
+      
+                      <div className="right-btn">
+                          <button class="btn"  onClick={() => navigate('/upload-data')}>
+                              <svg height="24" width="24" fill="#FFFFFF" viewBox="0 0 24 24" data-name="Layer 1" id="Layer_1" class="sparkle">
+                                  <path d="M10,21.236,6.755,14.745.264,11.5,6.755,8.255,10,1.764l3.245,6.491L19.736,11.5l-6.491,3.245ZM18,21l1.5,3L21,21l3-1.5L21,18l-1.5-3L18,18l-3,1.5ZM19.333,4.667,20.5,7l1.167-2.333L24,3.5,21.667,2.333,20.5,0,19.333,2.333,17,3.5Z"></path>
+                              </svg>
+      
+                              <span class="text">Try Again</span>
+                          </button>
+                      </div>
+                  </header>
+      
+      <div className="dashboard-wrapper">
         {/* Header */}
         <div className="dashboard-header">
           <h1>Career Compatibility Dashboard</h1>
-          <p>Analysis ID: {analysisId} | Status: {status} | Created: {new Date(created_at).toLocaleDateString()}</p>
+          <p>Status: {status} | Created: {new Date(created_at).toLocaleDateString()}</p>
         </div>
 
         <div className="metrics-row">
@@ -354,7 +372,7 @@ const Dashboard = () => {
 
           <div className="metric-card">
             <h3>Matched Skills</h3>
-            <div className="score-large">{skill_alignment.matched_skills.length}</div>
+            <div className="score-large">{skill_alignment.matched_skills.length}+</div>
           </div>
         </div>
 
@@ -399,7 +417,7 @@ const Dashboard = () => {
 
           <div className="culture-card">
             <h3>Company Culture</h3>
-            <p className="culture-subtitle">Cultural Fit: {compatibility_score.cultural_fit}%</p>
+            {/* <p className="culture-subtitle">Cultural Fit: {compatibility_score.cultural_fit}%</p> */}
             <div className="culture-items">
               {company_culture.values.map((value, index) => (
                 <div className="culture-item" key={index}>
